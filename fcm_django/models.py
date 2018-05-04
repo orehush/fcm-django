@@ -150,7 +150,7 @@ class FCMDeviceQuerySet(models.query.QuerySet):
             self.filter(registration_id=registration_id).delete()
 
 
-class FCMDevice(Device):
+class AbstractFCMDevice(Device):
     DEVICE_TYPES = (
         (u'ios', u'ios'),
         (u'android', u'android'),
@@ -168,6 +168,7 @@ class FCMDevice(Device):
 
     class Meta:
         verbose_name = _("FCM device")
+        abstract = True
 
     def send_message(
             self,
