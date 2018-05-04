@@ -3,7 +3,6 @@ from rest_framework import permissions
 from rest_framework.serializers import ModelSerializer, ValidationError, \
     Serializer, CurrentUserDefault
 from rest_framework.viewsets import ModelViewSet
-from fcm_django.models import FCMDevice
 from django import VERSION as DJ_VERSION
 from django.db.models import Q
 from fcm_django.settings import FCM_DJANGO_SETTINGS as SETTINGS
@@ -86,13 +85,6 @@ class UniqueRegistrationSerializerMixin(Serializer):
         return attrs
 
 
-class FCMDeviceSerializer(ModelSerializer, UniqueRegistrationSerializerMixin):
-    class Meta(DeviceSerializerMixin.Meta):
-        model = FCMDevice
-
-        extra_kwargs = {"id": {"read_only": False, "required": False}}
-
-
 # Permissions
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -133,13 +125,3 @@ class AuthorizedMixin(object):
     def get_queryset(self):
         # filter all devices to only those belonging to the current user
         return self.queryset.filter(user=self.request.user)
-
-
-# ViewSets
-class FCMDeviceViewSet(DeviceViewSetMixin, ModelViewSet):
-    queryset = FCMDevice.objects.all()
-    serializer_class = FCMDeviceSerializer
-
-
-class FCMDeviceAuthorizedViewSet(AuthorizedMixin, FCMDeviceViewSet):
-    pass
