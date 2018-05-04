@@ -1,7 +1,6 @@
 from django.apps import apps
 from django.contrib import admin, messages
 from django.utils.translation import ugettext_lazy as _
-from .models import FCMDevice
 from .settings import FCM_DJANGO_SETTINGS as SETTINGS
 
 User = apps.get_model(*SETTINGS["USER_MODEL"].split("."))
@@ -104,6 +103,3 @@ class DeviceAdmin(admin.ModelAdmin):
         queryset.update(active=False)
 
     disable.short_description = _("Disable selected devices")
-
-
-admin.site.register(FCMDevice, DeviceAdmin)
